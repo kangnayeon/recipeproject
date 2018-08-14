@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.travle.dao.AttractionMapper">
+
+<select id="selectAllwish" resultType="travletema" parameterType="string">
+select 
+	travletema.storename as storename, travletema.lon as lon, travletema.lat as lat
+from 
+	(travletema natural join wishlist7)
+where 
+	wishlist7.userid = #{value}
+</select>
+
+<select id="getTotalBoard" resultType="int" parameterType="map">
+SELECT count(*)
+FROM travletema
+WHERE 
+	${searchItem} like '%' || #{searchWord} || '%'
+</select>
+
+<select id="select" resultType="travletema" parameterType="map">
+<!-- rowbounds는 parametertype으로 굳이 넘기지 않아도 됨 -->
+SELECT 
+	temanumber,
+	storename,
+	storetype,
+	time,
+	storephone,
+	detail,
+	lon,
+	lat
+FROM 
+	travletema
+WHERE 	
+	${searchItem} like '%' || #{searchWord} || '%' 
+ORDER BY 
+	temanumber desc
+</select>
+
+<select id="selectOne" resultType="travletema" parameterType="int">
+SELECT 
+	temanumber,
+	storename,
+	storetype,
+	time,
+	storephone,
+	detail,
+	lon,
+	lat
+FROM 
+	travletema
+where 
+	temanumber = #{temanumber}
+</select>
+
+<insert id="insert" parameterType="wishlist">
+insert into
+	wishlist7
+values(
+	#{userid},
+	#{temanumber}
+	)
+</insert>
+
+</mapper>

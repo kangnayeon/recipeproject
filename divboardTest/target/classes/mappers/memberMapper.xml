@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.travle.dao.MemberMapper">
+	<!-- 회원가입 -->
+	<insert id="insert" parameterType="member">
+	INSERT INTO member7
+	(
+	userid,
+	userpwd,
+	username,
+	gender,
+	birth,
+	phone
+	)
+	VALUES(
+	#{userid},
+	#{userpwd},
+	#{username},
+	#{gender},
+	#{birth},
+	#{phone}
+	)
+	</insert>
+	
+	<update id="update" parameterType="member">
+	UPDATE member7 set
+	
+	userpwd=#{userpwd},
+	birth=#{birth},
+	phone=#{phone}
+	
+	where userid=#{userid}
+	</update>
+	
+	<!-- ID 중복확인/로그인 처리 -->
+	<select id="selectOne" parameterType="member" resultType="member">
+		select 
+		userid,
+		userpwd,
+		username,
+		gender,
+		to_char(birth ,'YYYY-MM-DD') birth,
+		phone
+			from member7
+		where
+		 userid=#{userid} 
+		 <if test="userpwd!=null">
+		 AND 
+		 userpwd=#{userpwd}
+		 </if>
+	</select>
+	
+
+</mapper>

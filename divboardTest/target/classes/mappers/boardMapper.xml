@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.travle.dao.BoardMapper">
+<!-- 게시판관련 쿼리 -->
+<!-- 동적 sql 이용과 $사용 -->
+<!-- #의 사용했던 것들을 차후에 자바 언어로 바뀔 때 ?로 변환되는데, 컬럼은 ?가 들어갈 수 없다.
+따라서 $표시를 사용해서 값을 처리해줘야 한다.  -->
+
+<select id="select" resultType="board" parameterType="map">
+<!-- rowbounds는 parametertype으로 굳이 넘기지 않아도 됨 -->
+SELECT 
+	boardnum,
+	userid,
+	title,
+	content,
+	to_char(regdate,'YYYY-MM-DD') regdate,
+	hitcount,
+	originalfile,	
+	savedfile,
+	boardtype
+FROM 
+	board7
+WHERE 	
+	${searchItem} like '%' || #{searchWord} || '%'
+	and boardtype = 1 
+ORDER BY 
+	boardnum desc
+</select>
+
+<select id="selectlog" resultType="board" parameterType="map">
+<!-- rowbounds는 parametertype으로 굳이 넘기지 않아도 됨 -->
+SELECT 
+	boardnum,
+	userid,
+	title,
+	content,
+	to_char(regdate,'YYYY-MM-DD') regdate,
+	hitcount,
+	originalfile,	
+	savedfile,
+	boardtype
+FROM 
+	board7
+WHERE 	
+	${searchItem} like '%' || #{searchWord} || '%'
+	and boardtype = 2
+ORDER BY 
+	boardnum desc
+</select>
+
+
+<select id="selectOne" resultType="board" parameterType="int">
+SELECT *FROM board7 WHERE boardnum=#{boardnum} 
+</select>
+
+<update id="updateHitcount" parameterType="board">
+UPDATE board7
+set
+hitcount=#{hitcount}+1
+WHERE 
+	boardnum=#{boardnum}
+</update>
+
+<insert id="insert" parameterType="board">
+INSERT INTO board7
+(
+	boardnum,	
+	userid,  	
+	title, 
+	content,
+	boardtype
+	
+	<if test ="originalfile !=null and savedfile != null">
+	,originalfile,
+	savedfile
+	</if>
+)VALUES(
+board7_seq.nextval,
+#{userid},
+#{title},
+#{content},
+#{boardtype}
+<if test ="originalfile !=null and savedfile != null">
+	,#{originalfile},
+	#{savedfile}
+	</if>
+)
+</insert>
+
+<delete id="delete" parameterType="int">
+DELETE board7 where boardnum=#{boardnum}
+</delete>
+
+<update id="update" parameterType="board">
+UPDATE board7 
+set
+title=#{title},
+content=#{content},
+boardtype=#{boardtype}
+<if test ="originalfile !=null and savedfile != null">
+	,originalfile=#{originalfile},
+	savedfile=#{savedfile}
+</if>
+<if test ="originalfile ==null and savedfile == null">
+	,originalfile=null,
+	savedfile=null
+</if>
+WHERE 
+	boardnum=#{boardnum}
+</update>
+
+<!-- 전체 글 개수 조회 -->
+<select id="getTotalBoard" resultType="int" parameterType="map">
+SELECT count(*) 
+FROM board7
+WHERE 
+	${searchItem} like '%' || #{searchWord} || '%'
+</select>
+</mapper>

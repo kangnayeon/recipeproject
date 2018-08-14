@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="db.properties" />
+	
+	<settings>
+		<setting value="NULL" name="jdbcTypeForNull"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="global.sesoc.travle.vo.Member" alias="member"/>
+		<typeAlias type="global.sesoc.travle.vo.Board" alias="board"/>
+		<typeAlias type="global.sesoc.travle.vo.Reply" alias="reply"/>
+		<typeAlias type="global.sesoc.travle.vo.TravleTema" alias="travletema"/>
+		<typeAlias type="global.sesoc.travle.vo.Wishlist" alias="wishlist"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="mappers/memberMapper.xml"/>
+		<mapper resource="mappers/boardMapper.xml"/>
+		<mapper resource="mappers/replyMapper.xml"/>
+		<mapper resource="mappers/attractionMapper.xml"/>
+	</mappers>
+	
+</configuration>
